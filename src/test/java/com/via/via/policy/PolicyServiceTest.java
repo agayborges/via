@@ -1,5 +1,6 @@
 package com.via.via.policy;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -7,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -35,13 +35,13 @@ public class PolicyServiceTest {
 
     @Test
     public void retrieveTest() {
-        when(policyRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-        policyService.retrieve(UUID.randomUUID());
+        when(policyRepository.findById(any(ObjectId.class))).thenReturn(Optional.empty());
+        policyService.retrieve(ObjectId.get());
     }
 
     @Test
     public void updateTest() {
-        when(policyRepository.existsById(any(UUID.class))).thenReturn(true);
+        when(policyRepository.existsById(any(ObjectId.class))).thenReturn(true);
         when(policyRepository.save(any(Policy.class))).thenReturn(new Policy());
         boolean updated = policyService.update(new Policy());
 
@@ -50,7 +50,7 @@ public class PolicyServiceTest {
 
     @Test
     public void createdByUpdateTest() {
-        when(policyRepository.existsById(any(UUID.class))).thenReturn(false);
+        when(policyRepository.existsById(any(ObjectId.class))).thenReturn(false);
         when(policyRepository.save(any(Policy.class))).thenReturn(new Policy());
         boolean updated = policyService.update(new Policy());
 
@@ -60,8 +60,8 @@ public class PolicyServiceTest {
     @Test
     public void createdByUpdateIdNullTest() {
         Policy policy = new Policy();
-        policy.setId(null);
-        when(policyRepository.existsById(any(UUID.class))).thenReturn(false);
+        policy.setNumber(null);
+        when(policyRepository.existsById(any(ObjectId.class))).thenReturn(false);
         when(policyRepository.save(any(Policy.class))).thenReturn(policy);
         boolean updated = policyService.update(new Policy());
 
@@ -70,17 +70,17 @@ public class PolicyServiceTest {
 
     @Test
     public void deleteTest() {
-        when(policyRepository.existsById(any(UUID.class))).thenReturn(true);
-        doNothing().when(policyRepository).deleteById(any(UUID.class));
-        boolean deleted = policyService.delete(UUID.randomUUID());
+        when(policyRepository.existsById(any(ObjectId.class))).thenReturn(true);
+        doNothing().when(policyRepository).deleteById(any(ObjectId.class));
+        boolean deleted = policyService.delete(ObjectId.get());
 
         assertTrue(deleted);
     }
 
     @Test
     public void deleteNotFoundTest() {
-        when(policyRepository.existsById(any(UUID.class))).thenReturn(false);
-        boolean deleted = policyService.delete(UUID.randomUUID());
+        when(policyRepository.existsById(any(ObjectId.class))).thenReturn(false);
+        boolean deleted = policyService.delete(ObjectId.get());
 
         assertFalse(deleted);
     }

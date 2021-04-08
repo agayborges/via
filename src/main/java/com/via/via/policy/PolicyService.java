@@ -1,10 +1,10 @@
 package com.via.via.policy;
 
 import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -16,17 +16,17 @@ public class PolicyService {
         policyRepository.save(policy);
     }
 
-    public Optional<Policy> retrieve(UUID id) {
+    public Optional<Policy> retrieve(ObjectId id) {
         return policyRepository.findById(id);
     }
 
     public boolean update(Policy policy) {
-        boolean hasPolicy = policyRepository.existsById(policy.getId());
+        boolean hasPolicy = policyRepository.existsById(policy.getNumber());
         policyRepository.save(policy);
         return hasPolicy;
     }
 
-    public boolean delete(UUID id) {
+    public boolean delete(ObjectId id) {
         boolean hasPolicy = policyRepository.existsById(id);
 
         if (hasPolicy) {
